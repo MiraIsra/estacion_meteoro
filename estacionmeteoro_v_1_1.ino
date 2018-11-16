@@ -8,14 +8,14 @@
 
 
 #define WIFI_AP "Casa"
-#define WIFI_PASSWORD "3rober2es1nuestro0casero"
+#define WIFI_PASSWORD ""
 
 #define esp_tx_pin 3 //6
 #define esp_rx_pin 2 //5
 #define esp_power_pin 5
 
 
-#define TOKEN "miraisra/estacion/datos"
+#define TOKEN ""
 
 const int estacion = 1; // Identificador de la estación actual
 //**********Declaramos pines de sensores**********//
@@ -28,13 +28,12 @@ const long A = 16;     // Resistencia en oscuridad en KΩ LA RESISTENCIA QUE COL
 const int B = 15;        // Resistencia a la luz (10 Lux) en KΩ**DATO A CALIBRAR**
 const int Rc = 10;       // Resistencia calibracion en KΩ**DATO A CALIBRAR**
 
-//uint32_t baud = 9600;
 
-char mqtt_server[] = "miraraspiisra.ddns.net";
+char mqtt_server[] = "";
 
 // Initialize the Ethernet client object
 WiFiEspClient espClient;
-const char* topicName = "miraisra/estacion/datos";
+const char* topicName = "";
 
 // Initialize DHT sensor.
 DHT dht(DHTPIN, DHTTYPE);
@@ -47,15 +46,12 @@ SoftwareSerial soft(esp_rx_pin, esp_tx_pin); // RX, TX (2, 3) (5, 6)
 
 int status = WL_IDLE_STATUS;
 unsigned long lastSend;
-//unsigned long lastRead;
-//String sensorData;
 
 String GetSensorData();
 void SendSensorData (String);
 
 void setup() {
   // Inicializamos Wifi
-  // initialize serial for debugging
   Serial.begin(9600);
   //Configuro watchdog
   wdt_disable(); // deshabilito el watchdog
@@ -63,8 +59,7 @@ void setup() {
   wdt_enable (WDTO_8S); // habilito el watchdog cada 8 segundos
   Serial.println(F("Watchdog enabled."));
   int t = millis();
-  //pinMode (esp_power_pin, OUTPUT);
-  //analogWrite (esp_power_pin, 3.3);
+ 
   InitWiFi();
   Serial.print("InitWifi: ");
   Serial.println(millis()-t);
@@ -76,13 +71,6 @@ void setup() {
   dht.begin();
   bmp.begin(); // Inicia el sensor
   pinMode(LDRPin, INPUT);
-  //lastRead = -1800000;
-
-  /* print your WiFi shield's IP address
-  IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
-  Serial.println(ip);*/
-  
 }
 
 void loop() {
@@ -154,23 +142,7 @@ String GetSensorData ()
   
   // Obtenemos media de ambas T
   float t = (t1 + t2)/2;  // Hacemos la media de las dos temperaturas obtenidas
-  /*
-  Serial.print("Humidity Abs: ");
-  Serial.print(habs);
-    Serial.print("Humidity Rel: ");
-  Serial.print(hrel);
-  Serial.print(" %\t");
-  Serial.print("Temperature: ");
-  Serial.print(t);
-  Serial.print(" *C ");
-    Serial.print("Presion: ");
-  Serial.print(p);
-    Serial.print("Altura: ");
-  Serial.print(a);
-  Serial.print(" Ilumination:" );
-  Serial.print(l);
-  Serial.print(" Lum.");*/
-
+  
   String temperature = String(t);
   String humidityAbs = String(habs);
   String humidityRel = String(hrel);
@@ -208,12 +180,7 @@ void SendSensorData(String payload)
 }
 
 void InitWiFi()
-{
-  // initialize serial for ESP module
-  //analogWrite (esp_power_pin, 0);
-  delay(300);
-  //analogWrite (esp_power_pin, 3.3);
-  delay(300); 
+{ 
   soft.begin(9600);
   // initialize ESP module
   
